@@ -31,16 +31,7 @@ let filtering = false;
 //  Click circle -> show only that one
 
 function initialize(data, modeName) {
-  let mode;
-  if (modeName === "") {
-    mode = "AST";
-  } else if (modeName === "bytecode") {
-    mode = "Bytecode";
-  } else if (modeName === "bytecode-optimized") {
-    mode = "Optimized Bytecode";
-  } else {
-    mode = modeName;
-  }
+  let mode = modeName;
 
   // Do a pass and generate the tree.
   for (const testPath in data.results) {

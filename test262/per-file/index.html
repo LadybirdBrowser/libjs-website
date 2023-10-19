@@ -62,11 +62,7 @@
     <script>
       window.config = {
         initialPathInTree: "test",
-        loadPathsAndModes: [
-          ["per-file-master.json", ""],
-          ["per-file-bytecode-master.json", "bytecode"],
-          ["per-file-bytecode-optimized-master.json", "bytecode-optimized"],
-        ],
+        loadPathsAndModes: [["per-file-master.json", ""]],
         generateGitHubURLFromTestPath(filepath) {
           return `https://github.com/tc39/test262/tree/main/${filepath}`;
         },
