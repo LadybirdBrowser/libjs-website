@@ -2,7 +2,7 @@
 
 set -eo pipefail
 
-REPOSITORY="${TEST262_DATA_REPOSITORY:-SerenityOS/libjs-test262-data}"
+REPOSITORY="${TEST262_DATA_REPOSITORY:-SerenityOS/libjs-data}"
 
 mkdir -p test262/data wasm/data
 
