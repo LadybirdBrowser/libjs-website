@@ -1,9 +1,9 @@
-const fetchData = (url) => {
-  const headers = new Headers();
-  headers.append("pragma", "no-cache");
-  headers.append("cache-control", "no-cache");
-  return fetch(new Request(url), {
+const LIBJS_DATA_URL =
+  "https://raw.githubusercontent.com/SerenityOS/libjs-data/master";
+
+const fetchData = (path) => {
+  return fetch(`${LIBJS_DATA_URL}/${path}`, {
     method: "GET",
-    headers,
+    cache: "no-cache",
   });
 };

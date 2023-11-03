@@ -461,7 +461,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const promises = [];
   for (const [path, mode] of window.config.loadPathsAndModes) {
     promises.push(
-      fetchData(`../data/${path}`)
+      fetchData(path)
         .then((response) => response.json())
         .then((data) => initialize(data, mode))
     );

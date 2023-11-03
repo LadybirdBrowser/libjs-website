@@ -376,7 +376,7 @@ Versions: serenity@${serenityVersion}`;
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    fetchData("data/results.json")
+    fetchData("wasm/results.json")
       .then((response) => response.json())
       .then((data) => {
         data.sort((a, b) =>

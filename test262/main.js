@@ -407,7 +407,7 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    fetchData("data/results.json")
+    fetchData("test262/results.json")
       .then((response) => response.json())
       .then((data) => {
         data.sort((a, b) =>

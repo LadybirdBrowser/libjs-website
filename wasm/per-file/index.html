@@ -59,7 +59,7 @@
     <script>
       window.config = {
         initialPathInTree: "Spec",
-        loadPathsAndModes: [["per-file-master.json", "Default"]],
+        loadPathsAndModes: [["wasm/per-file-master.json", "Default"]],
         generateGitHubURLFromTestPath(filepath) {
           const result = /^Spec\/(.*)\.js\/[^:]*::(.*)*$/.exec(filepath);
           if (!result) return "";
