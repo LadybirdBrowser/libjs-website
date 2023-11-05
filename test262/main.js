@@ -64,44 +64,54 @@
   function prepareDataForCharts(data) {
     const charts = {
       ...Object.fromEntries(
-        ["test262"].map((name) => [
-          name,
-          {
-            data: {
-              [TestResult.PASSED]: [],
-              [TestResult.FAILED]: [],
-              [TestResult.SKIPPED]: [],
-              [TestResult.METADATA_ERROR]: [],
-              [TestResult.HARNESS_ERROR]: [],
-              [TestResult.TIMEOUT_ERROR]: [],
-              [TestResult.PROCESS_ERROR]: [],
-              [TestResult.RUNNER_EXCEPTION]: [],
-              [TestResult.TODO_ERROR]: [],
-              [TestResult.DURATION]: [],
-            },
-            datasets: [],
-            metadata: [],
-          },
-        ])
+        [].concat(
+          ...["test262", "test262-jit"].map((name) => [
+            [
+              name,
+              {
+                data: {
+                  [TestResult.PASSED]: [],
+                  [TestResult.FAILED]: [],
+                  [TestResult.SKIPPED]: [],
+                  [TestResult.METADATA_ERROR]: [],
+                  [TestResult.HARNESS_ERROR]: [],
+                  [TestResult.TIMEOUT_ERROR]: [],
+                  [TestResult.PROCESS_ERROR]: [],
+                  [TestResult.RUNNER_EXCEPTION]: [],
+                  [TestResult.TODO_ERROR]: [],
+                  [TestResult.DURATION]: [],
+                },
+                datasets: [],
+                metadata: [],
+              },
+            ],
+            [
+              `${name}-performance`,
+              {
+                data: {
+                  [TestResult.DURATION]: [],
+                },
+                datasets: [],
+                metadata: [],
+              },
+            ],
+            [
+              `${name}-performance-per-test`,
+              {
+                data: {
+                  [TestResult.DURATION]: [],
+                },
+                datasets: [],
+                metadata: [],
+              },
+            ],
+          ])
+        )
       ),
       ["test262-parser-tests"]: {
         data: {
           [TestResult.PASSED]: [],
           [TestResult.FAILED]: [],
-        },
-        datasets: [],
-        metadata: [],
-      },
-      ["test262-performance"]: {
-        data: {
-          [TestResult.DURATION]: [],
-        },
-        datasets: [],
-        metadata: [],
-      },
-      ["test262-performance-per-test"]: {
-        data: {
-          [TestResult.DURATION]: [],
         },
         datasets: [],
         metadata: [],
@@ -137,41 +147,47 @@
         continue;
       }
 
-      // chart-test262-performance
-      const performanceTests = entry.tests["test262"];
-      const performanceChart = charts["test262-performance"];
-      const performanceResults = performanceTests?.results;
-      if (performanceResults) {
-        performanceChart.metadata.push({
-          commitTimestamp: entry.commit_timestamp,
-          runTimestamp: entry.run_timestamp,
-          duration: performanceTests.duration,
-          versions: entry.versions,
-          total: performanceResults.total,
-        });
-        performanceChart.data["duration"].push({
-          x: entry.commit_timestamp * 1000,
-          y: performanceTests.duration,
-        });
-      }
+      for (const jitSuffix of ["", "-jit"]) {
+        // chart-test262-performance
+        const performanceTests = entry.tests[`test262${jitSuffix}`];
+        const performanceChart = charts[`test262${jitSuffix}-performance`];
+        const performanceResults = performanceTests?.results;
+        if (performanceResults) {
+          performanceChart.metadata.push({
+            commitTimestamp: entry.commit_timestamp,
+            runTimestamp: entry.run_timestamp,
+            duration: performanceTests.duration,
+            versions: entry.versions,
+            total: performanceResults.total,
+          });
+          performanceChart.data["duration"].push({
+            x: entry.commit_timestamp * 1000,
+            y: performanceTests.duration,
+          });
+        }
 
-      // chart-test262-performance-per-test
-      const performancePerTestTests = entry.tests["test262"];
-      const performancePerTestChart = charts["test262-performance-per-test"];
-      const performancePerTestResults = performancePerTestTests?.results;
-      if (performancePerTestResults) {
-        performancePerTestChart.metadata.push({
-          commitTimestamp: entry.commit_timestamp,
-          runTimestamp: entry.run_timestamp,
-          duration:
-            performancePerTestTests.duration / performancePerTestResults.total,
-          versions: entry.versions,
-          total: performancePerTestResults.total,
-        });
-        performancePerTestChart.data["duration"].push({
-          x: entry.commit_timestamp * 1000,
-          y: performancePerTestTests.duration / performancePerTestResults.total,
-        });
+        // chart-test262-performance-per-test
+        const performancePerTestTests = entry.tests[`test262${jitSuffix}`];
+        const performancePerTestChart =
+          charts[`test262${jitSuffix}-performance-per-test`];
+        const performancePerTestResults = performancePerTestTests?.results;
+        if (performancePerTestResults) {
+          performancePerTestChart.metadata.push({
+            commitTimestamp: entry.commit_timestamp,
+            runTimestamp: entry.run_timestamp,
+            duration:
+              performancePerTestTests.duration /
+              performancePerTestResults.total,
+            versions: entry.versions,
+            total: performancePerTestResults.total,
+          });
+          performancePerTestChart.data["duration"].push({
+            x: entry.commit_timestamp * 1000,
+            y:
+              performancePerTestTests.duration /
+              performancePerTestResults.total,
+          });
+        }
       }
     }
 
@@ -374,50 +390,90 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
 
   function initialize(data) {
     const { charts } = prepareDataForCharts(data);
-    initializeChart(document.getElementById("chart-test262"), charts.test262);
     initializeChart(
       document.getElementById("chart-test262-parser-tests"),
       charts["test262-parser-tests"]
     );
-    initializeChart(
-      document.getElementById("chart-test262-performance"),
-      charts["test262-performance"],
-      { yAxisTitle: TestResultLabels[TestResult.DURATION] }
-    );
-    initializeChart(
-      document.getElementById("chart-test262-performance-per-test"),
-      charts["test262-performance-per-test"],
-      { yAxisTitle: TestResultLabels[TestResult.DURATION] }
-    );
+    for (const jitSuffix of ["", "-jit"]) {
+      initializeChart(
+        document.getElementById(`chart-test262${jitSuffix}`),
+        charts[`test262${jitSuffix}`]
+      );
+      initializeChart(
+        document.getElementById(`chart-test262${jitSuffix}-performance`),
+        charts[`test262${jitSuffix}-performance`],
+        { yAxisTitle: TestResultLabels[TestResult.DURATION] }
+      );
+      initializeChart(
+        document.getElementById(
+          `chart-test262${jitSuffix}-performance-per-test`
+        ),
+        charts[`test262${jitSuffix}-performance-per-test`],
+        { yAxisTitle: TestResultLabels[TestResult.DURATION] }
+      );
+    }
+
     const last = data.slice(-1)[0];
-    initializeSummary(
-      document.getElementById("summary-test262"),
-      last.run_timestamp,
-      last.versions.serenity,
-      last.tests.test262.duration,
-      last.tests.test262.results
-    );
-    initializeSummary(
-      document.getElementById("summary-test262-parser-tests"),
-      last.run_timestamp,
-      last.versions.serenity,
-      last.tests["test262-parser-tests"].duration,
-      last.tests["test262-parser-tests"].results
-    );
+    if ("test262" in last.tests) {
+      initializeSummary(
+        document.getElementById("summary-test262"),
+        last.run_timestamp,
+        last.versions.serenity,
+        last.tests.test262.duration,
+        last.tests.test262.results
+      );
+    }
+
+    if ("test262-jit" in last.tests) {
+      initializeSummary(
+        document.getElementById("summary-test262-jit"),
+        last.run_timestamp,
+        last.versions.serenity,
+        last.tests["test262-jit"].duration,
+        last.tests["test262-jit"].results
+      );
+    }
+
+    if ("test262-parser-tests" in last.tests) {
+      initializeSummary(
+        document.getElementById("summary-test262-parser-tests"),
+        last.run_timestamp,
+        last.versions.serenity,
+        last.tests["test262-parser-tests"].duration,
+        last.tests["test262-parser-tests"].results
+      );
+    }
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    fetchData("test262/results.json")
-      .then((response) => response.json())
-      .then((data) => {
-        data.sort((a, b) =>
+    Promise.all([
+      fetchData("test262/results.json").then((response) => response.json()),
+      fetchData("test262/results-jit.json").then((response) => response.json()),
+    ])
+      .then((results) => {
+        const [bcData, jitData] = results;
+        const bcDataBySerenityCommitHash = Object.fromEntries(
+          bcData.map((entry) => [entry.versions.serenity, entry])
+        );
+        jitData.forEach((entry) => {
+          const data = bcDataBySerenityCommitHash[entry.versions.serenity];
+          if (data !== undefined) {
+            data.tests["test262-jit"] = entry.tests["test262"];
+          } else {
+            bcData.push({
+              ...entry,
+              tests: { "test262-jit": entry.tests["test262"] },
+            });
+          }
+        });
+        bcData.sort((a, b) =>
           a.commit_timestamp === b.commit_timestamp
             ? 0
             : a.commit_timestamp < b.commit_timestamp
             ? -1
             : 1
         );
-        return data;
+        return bcData;
       })
       .then((data) => initialize(data));
   });
