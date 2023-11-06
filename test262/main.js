@@ -446,34 +446,17 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    Promise.all([
-      fetchData("test262/results.json").then((response) => response.json()),
-      fetchData("test262/results-jit.json").then((response) => response.json()),
-    ])
-      .then((results) => {
-        const [bcData, jitData] = results;
-        const bcDataBySerenityCommitHash = Object.fromEntries(
-          bcData.map((entry) => [entry.versions.serenity, entry])
-        );
-        jitData.forEach((entry) => {
-          const data = bcDataBySerenityCommitHash[entry.versions.serenity];
-          if (data !== undefined) {
-            data.tests["test262-jit"] = entry.tests["test262"];
-          } else {
-            bcData.push({
-              ...entry,
-              tests: { "test262-jit": entry.tests["test262"] },
-            });
-          }
-        });
-        bcData.sort((a, b) =>
+    fetchData("test262/results.json")
+      .then((response) => response.json())
+      .then((data) => {
+        data.sort((a, b) =>
           a.commit_timestamp === b.commit_timestamp
             ? 0
             : a.commit_timestamp < b.commit_timestamp
             ? -1
             : 1
         );
-        return bcData;
+        return data;
       })
       .then((data) => initialize(data));
   });
