@@ -65,7 +65,7 @@
     const charts = {
       ...Object.fromEntries(
         [].concat(
-          ...["test262", "test262-jit"].map((name) => [
+          ...["test262"].map((name) => [
             [
               name,
               {
@@ -147,10 +147,10 @@
         continue;
       }
 
-      for (const jitSuffix of ["", "-jit"]) {
+      for (const suffix of [""]) {
         // chart-test262-performance
-        const performanceTests = entry.tests[`test262${jitSuffix}`];
-        const performanceChart = charts[`test262${jitSuffix}-performance`];
+        const performanceTests = entry.tests[`test262${suffix}`];
+        const performanceChart = charts[`test262${suffix}-performance`];
         const performanceResults = performanceTests?.results;
         if (performanceResults) {
           performanceChart.metadata.push({
@@ -167,9 +167,9 @@
         }
 
         // chart-test262-performance-per-test
-        const performancePerTestTests = entry.tests[`test262${jitSuffix}`];
+        const performancePerTestTests = entry.tests[`test262${suffix}`];
         const performancePerTestChart =
-          charts[`test262${jitSuffix}-performance-per-test`];
+          charts[`test262${suffix}-performance-per-test`];
         const performancePerTestResults = performancePerTestTests?.results;
         if (performancePerTestResults) {
           performancePerTestChart.metadata.push({
@@ -394,21 +394,19 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
       document.getElementById("chart-test262-parser-tests"),
       charts["test262-parser-tests"]
     );
-    for (const jitSuffix of ["", "-jit"]) {
+    for (const suffix of [""]) {
       initializeChart(
-        document.getElementById(`chart-test262${jitSuffix}`),
-        charts[`test262${jitSuffix}`]
+        document.getElementById(`chart-test262${suffix}`),
+        charts[`test262${suffix}`]
       );
       initializeChart(
-        document.getElementById(`chart-test262${jitSuffix}-performance`),
-        charts[`test262${jitSuffix}-performance`],
+        document.getElementById(`chart-test262${suffix}-performance`),
+        charts[`test262${suffix}-performance`],
         { yAxisTitle: TestResultLabels[TestResult.DURATION] }
       );
       initializeChart(
-        document.getElementById(
-          `chart-test262${jitSuffix}-performance-per-test`
-        ),
-        charts[`test262${jitSuffix}-performance-per-test`],
+        document.getElementById(`chart-test262${suffix}-performance-per-test`),
+        charts[`test262${suffix}-performance-per-test`],
         { yAxisTitle: TestResultLabels[TestResult.DURATION] }
       );
     }
@@ -421,16 +419,6 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
         last.versions.serenity,
         last.tests.test262.duration,
         last.tests.test262.results
-      );
-    }
-
-    if ("test262-jit" in last.tests) {
-      initializeSummary(
-        document.getElementById("summary-test262-jit"),
-        last.run_timestamp,
-        last.versions.serenity,
-        last.tests["test262-jit"].duration,
-        last.tests["test262-jit"].results
       );
     }
 
