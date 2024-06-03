@@ -297,7 +297,7 @@
                 } = metadata[dataIndex];
                 const dateTime = DateTime.fromSeconds(commitTimestamp);
                 const duration = Duration.fromMillis(durationSeconds * 1000);
-                const serenityVersion = versions.serenity.substring(0, 7);
+                const ladybirdVersion = versions.serenity.substring(0, 7);
                 // prettier-ignore
                 const libjsTest262Version = versions["libjs-test262"].substring(0, 7);
                 const test262Version = versions.test262.substring(0, 7);
@@ -307,7 +307,7 @@
 Committed on ${dateTime.toLocaleString(DateTime.DATETIME_SHORT)}, \
 run took ${duration.toISOTime()}
 
-Versions: serenity@${serenityVersion}, libjs-test262@${libjsTest262Version},
+Versions: ladybird@${ladybirdVersion}, libjs-test262@${libjsTest262Version},
 test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
               },
             },
@@ -375,7 +375,7 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
     </strong> for commit
     <code>
       <a
-        href="https://github.com/SerenityOS/serenity/commits/${commitHash}"
+        href="https://github.com/LadybirdWebBrowser/ladybird/commits/${commitHash}"
         target="_blank"
         rel="noopener noreferrer"
         title="View commits up to this point"

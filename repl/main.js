@@ -36,7 +36,7 @@ const headerDescriptionSpan = document.getElementById("header-description");
 
   const buildHash = Module.SERENITYOS_COMMIT;
   const shortenedBuildHash = buildHash.substring(0, 7);
-  headerDescriptionSpan.innerHTML = ` (built from <a href="https://github.com/serenityos/serenity/commit/${buildHash}">${shortenedBuildHash}</a>)`;
+  headerDescriptionSpan.innerHTML = ` (built from <a href="https://github.com/LadybirdWebBrowser/ladybird/commit/${buildHash}">${shortenedBuildHash}</a>)`;
 
   loadingContainer.style.display = "none";
   mainContainer.style.display = "";

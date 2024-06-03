@@ -265,12 +265,12 @@
                 } = metadata[dataIndex];
                 const dateTime = DateTime.fromSeconds(commitTimestamp);
                 const duration = Duration.fromMillis(durationSeconds * 1000);
-                const serenityVersion = versions.serenity.substring(0, 7);
+                const ladybirdVersion = versions.serenity.substring(0, 7);
                 return `\
 Committed on ${dateTime.toLocaleString(DateTime.DATETIME_SHORT)}, \
 run took ${duration.toISOTime()}
 
-Versions: serenity@${serenityVersion}`;
+Versions: ladybird@${ladybirdVersion}`;
               },
             },
           },
@@ -337,7 +337,7 @@ Versions: serenity@${serenityVersion}`;
     </strong> for commit
     <code>
       <a
-        href="https://github.com/SerenityOS/serenity/commits/${commitHash}"
+        href="https://github.com/LadybirdWebBrowser/ladybird/commits/${commitHash}"
         target="_blank"
         rel="noopener noreferrer"
         title="View commits up to this point"

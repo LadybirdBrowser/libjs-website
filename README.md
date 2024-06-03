@@ -1,3 +1,3 @@
 # LibJS Website
 
-Website for SerenityOS's JavaScript engine.
+Website for Ladybird's JavaScript engine.
