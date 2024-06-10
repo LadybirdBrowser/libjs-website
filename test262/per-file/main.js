@@ -238,7 +238,7 @@ function generateChildNode(childName, child, filepath) {
     child.aggregatedResults
   );
   childNode.querySelector(".tree-node-github-url").href =
-    window.config.generateGitHubURLFromTestPath(filepath);
+    window.config.generateGitHubURLFromTestPath(filepath, childName);
   return childNode;
 }
 

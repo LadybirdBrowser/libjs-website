@@ -60,10 +60,12 @@
       window.config = {
         initialPathInTree: "Spec",
         loadPathsAndModes: [["wasm/per-file-master.json", "Default"]],
-        generateGitHubURLFromTestPath(filepath) {
+        generateGitHubURLFromTestPath(filepath, testName) {
           const result = /^Spec\/(.*)\.js\/[^:]*::(.*)*$/.exec(filepath);
           if (!result) return "";
-          return `https://github.com/WebAssembly/testsuite/blob/main/${result[1]}.wast`;
+          const lineNumber = /\(line (\d+)\)$/.exec(testName);
+          const line = lineNumber ? `#L${lineNumber[1]}` : "";
+          return `https://github.com/WebAssembly/testsuite/blob/main/${result[1]}.wast${line}`;
         },
       };
     </script>
